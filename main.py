@@ -16,4 +16,4 @@ def index():
 if __name__ == "__main__":
     pass
     # 最後一行，要執行
-    app.run(debug=True)
+    # app.run(debug=True)

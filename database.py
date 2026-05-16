@@ -75,7 +75,6 @@ def open_db():
     return None, None
 
 
-print(get_latest_data())
-
 if __name__ == "__main__":
     pass
+    # get_latest_data()
