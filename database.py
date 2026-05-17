@@ -10,6 +10,73 @@ load_dotenv()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+def get_data_by_county(county):
+    conn, cursor = open_db()
+
+    result = {"success": True, "message": None, "rows": None}
+
+    if not conn:
+        result["success"] = False
+        result["message"] = "資料庫開啟失敗！"
+        return result
+
+    # sql = "SELECT * FROM data LIMIT 500;"
+    sql = """
+    SELECT * FROM data where county=%s and datacreationdate=
+    (SELECT max(datacreationdate) FROM data);
+    """
+
+    # 取得資料庫裡最新的日期
+    # sql = "SELECT max(datacreationdate) FROM data;"
+    try:
+        # %s佔位符，要給參數(county,)
+        cursor.execute(sql, (county,))
+
+        rows = cursor.fetchall()
+        result["success"] = True
+        result["rows"] = rows
+
+        return result
+
+    except Exception as e:
+        result["success"] = False
+        result["message"] = f"資料庫查詢失敗，原因：{e}"
+
+        return result
+    finally:
+        conn.close()
+
+
+# （下拉選單用）取得不重複資料
+def get_counties():
+    conn, cursor = open_db()
+    result = {"success": True, "message": None, "rows": None}
+
+    if not conn:
+        result["success"] = False
+        result["message"] = "資料庫開啟失敗！"
+
+        return result
+
+    sql = "SELECT DISTINCT county from data ORDER BY county DESC;"
+    try:
+        cursor.execute(sql)
+
+        rows = cursor.fetchall()
+        result["success"] = True
+        result["rows"] = rows
+
+        return result
+
+    except Exception as e:
+        result["success"] = False
+        result["message"] = f"資料庫查詢失敗，原因：{e}"
+
+        return result
+    finally:
+        conn.close()
+
+
 def get_latest_data():
     conn, cursor = open_db()
 
@@ -76,5 +143,6 @@ def open_db():
 
 
 if __name__ == "__main__":
-    pass
-    # get_latest_data()
+    # pass
+    # print(get_latest_data())
+    print(get_data_by_county("新北市"))
