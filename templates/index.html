@@ -278,20 +278,20 @@ qjx-zwhc-cpp
       console.log("123");
       
       fetch(`/api/data/six_county`)
-      .then(res=>res.json())
-      .then(data=>{
-        const labels=data.labels;
-        const values=data.values;
+        .then(res=>res.json())
+        .then(data=>{
+          const labels=data.labels;
+          const values=data.values;
 
-        console.log(labels, values);
-          myChart.data.labels = labels;
-          myChart.data.datasets[0].label = `六都 PM2.5 平均值`;
-          myChart.data.datasets[0].data = values;
-          myChart.data.datasets[0].backgroundColor = '#E6CAFF';
-          myChart.data.datasets[0].borderColor = 'rgba(52, 152, 219, 1)';
-          myChart.update();
-        
-      })
+          console.log(labels, values);
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].label = `六都 PM2.5 平均值`;
+            myChart.data.datasets[0].data = values;
+            myChart.data.datasets[0].backgroundColor = '#E6CAFF';
+            myChart.data.datasets[0].borderColor = 'rgba(52, 152, 219, 1)';
+            myChart.update();
+          
+        })
 
     });
 
