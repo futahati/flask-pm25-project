@@ -214,18 +214,23 @@ qjx-zwhc-cpp
   <h1>🌫 PM2.5 即時空氣品質監測</h1>
   <p>資料來源：環境部即時 API</p>
   <p>🕒 資料更新時間：<span id="update-time">
+    {{data.datetime}}
     </span>
   </p>
 
+  {% if data %}
   <div class="kpi-card higher">
-    <span class="kpi-label">🚩 最高測站</span>
-    <span class="kpi-value"> <small>μg/m³</small></span>
+    <span class="kpi-label">🚩 最高測站：</span>
+    <span class="kpi-value">{{data.max[0]}} | {{data.max[1]}} <small>μg/m³</small></span>
   </div>
 
   <div class="kpi-card lower">
-    <span class="kpi-label">✅ 最低測站</span>
-    <span class="kpi-value"> <small>μg/m³</small></span>
+    <span class="kpi-label">✅ 最低測站：</span>
+    <span class="kpi-value">{{data.min[0]}} | {{data.min[1]}} <small>μg/m³</small></span>
   </div>
+  {% else %}
+  <span class="kpi-card">資料取得失敗！</span>
+  {% endif %}
   </div>
   <div class="table-container">
     <table>
@@ -265,7 +270,30 @@ qjx-zwhc-cpp
   <script>
     const countiesEl = document.querySelector("#counties");
     const countyCtx=document.querySelector("#pm25Chart");
-    console.log(countiesEl);
+    const sixCountyBtnEl=document.querySelector("#btn-six-avg");
+    // console.log(sixCountyBtnEl);
+
+    // 監聽 click 的行為
+    sixCountyBtnEl.addEventListener("click", (e) => {
+      console.log("123");
+      
+      fetch(`/api/data/six_county`)
+      .then(res=>res.json())
+      .then(data=>{
+        const labels=data.labels;
+        const values=data.values;
+
+        console.log(labels, values);
+          myChart.data.labels = labels;
+          myChart.data.datasets[0].label = `六都 PM2.5 平均值`;
+          myChart.data.datasets[0].data = values;
+          myChart.data.datasets[0].backgroundColor = '#E6CAFF';
+          myChart.data.datasets[0].borderColor = 'rgba(52, 152, 219, 1)';
+          myChart.update();
+        
+      })
+
+    });
 
     // 監聽 change 的行為
     countiesEl.addEventListener("change", (e) => {
