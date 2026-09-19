@@ -76,6 +76,13 @@
 
 ## 使用 requirements.txt 建立，並設定虛擬環境
 
+```bash
+# 匯出/生成套件清單 (開發者在本地準備上傳時使用)
+pip freeze > requirements.txt
+
+# 依照清單一鍵安裝套件 (換電腦、新環境或其他人下載專案時使用)
+pip install -r requirements.txt
+```
 - 條件：資料夾裡有 `requirements.txt`
   1. Ctrl + Shift + P --- 開啟命令面板
   2. 輸入→選擇 `Python: Create Environment`
